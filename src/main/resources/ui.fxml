@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.ToggleGroup?>
+
+<!-- Specifying the controller by fx:controller to bind #onXXX to the controllers methods -->
+<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.philippesteinbach.control.EditorController">
+    <children>
+        <MenuBar>
+            <Menu text="File">
+                <MenuItem accelerator="Shortcut+N" onAction="#onNew" text="New" />
+                <MenuItem accelerator="Shortcut+S" onAction="#onSave" text="Save" />
+                <MenuItem onAction="#onSaveAs" text="Save As" />
+                <MenuItem onAction="#onOpen" text="Open" />
+                <MenuItem onAction="#onClose" text="Close" />
+            </Menu>
+            <Menu text="Encryption">
+            <items>
+               <Menu text="Mode">
+                   <fx:define>
+                       <ToggleGroup fx:id="modeGroup"/>
+                   </fx:define>
+                 <items>
+                     <RadioMenuItem toggleGroup="$modeGroup" text="CBC" onAction="#setMode" />
+                     <RadioMenuItem toggleGroup="$modeGroup" text="ECB" onAction="#setMode" selected="true" />
+                     <RadioMenuItem toggleGroup="$modeGroup" text="CTS" onAction="#setMode" />
+                 </items>
+               </Menu>
+                <Menu text="Padding">
+                    <fx:define>
+                        <ToggleGroup fx:id="paddingGroup"/>
+                    </fx:define>
+                    <items>
+                        <RadioMenuItem toggleGroup="$paddingGroup" onAction="#setPadding" text="ISO7816-4Padding" />
+                        <RadioMenuItem toggleGroup="$paddingGroup" onAction="#setPadding" text="ISO10126-2Padding" />
+                        <RadioMenuItem toggleGroup="$paddingGroup" onAction="#setPadding" text="PKCS5Padding" selected="true" />
+                        <RadioMenuItem toggleGroup="$paddingGroup" onAction="#setPadding" text="PKCS7Padding" />
+                        <RadioMenuItem toggleGroup="$paddingGroup" onAction="#setPadding" text="X9.23Padding" />
+                        <RadioMenuItem toggleGroup="$paddingGroup" onAction="#setPadding" text="TBCPadding" />
+                        <RadioMenuItem toggleGroup="$paddingGroup" onAction="#setPadding" text="ZeroBytePadding" />
+                    </items>
+                </Menu>
+            </items>
+            </Menu>
+            <Menu text="Help">
+                <MenuItem onAction="#onAbout" text="About" />
+            </Menu>
+        </MenuBar>
+        <HBox prefHeight="100.0" prefWidth="200.0">
+            <children>
+                <Button focusTraversable="false" onAction="#onEncrypt" text="_Encrypt" />
+                <Button focusTraversable="false" onAction="#onDecrypt" text="Decrypt" />
+            </children>
+        </HBox>
+        <TextArea fx:id="areaText" prefHeight="400.0" prefWidth="200.0" wrapText="true" />
+        <HBox prefHeight="100.0" prefWidth="200.0" />
+    </children>
+</VBox>
