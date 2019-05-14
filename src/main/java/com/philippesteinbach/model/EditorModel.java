@@ -22,6 +22,7 @@ public class EditorModel {
             return new IOResult<>(true, textFile);
         } catch (IOException e) {
             e.printStackTrace();
+            //TODO alert when operation failed
             return new IOResult<>(false, null);
         }
     }
@@ -37,6 +38,7 @@ public class EditorModel {
             return new IOResult<>(true, new TextFile(file, lines));
         } catch (IOException e) {
             e.printStackTrace();
+            //TODO alert when operation failed
             return new IOResult<>(false, null);
         }
     }

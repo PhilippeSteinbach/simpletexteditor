@@ -31,6 +31,11 @@
                      <RadioMenuItem toggleGroup="$modeGroup" text="CBC" onAction="#setMode" />
                      <RadioMenuItem toggleGroup="$modeGroup" text="ECB" onAction="#setMode" selected="true" />
                      <RadioMenuItem toggleGroup="$modeGroup" text="CTS" onAction="#setMode" />
+                     <!--
+                     <RadioMenuItem toggleGroup="$modeGroup" text="CTR" onAction="#setMode" />
+                     <RadioMenuItem toggleGroup="$modeGroup" text="CTF" onAction="#setMode" />
+                     <RadioMenuItem toggleGroup="$modeGroup" text="OFB" onAction="#setMode" />
+                     -->
                  </items>
                </Menu>
                 <Menu text="Padding">
@@ -45,6 +50,7 @@
                         <RadioMenuItem toggleGroup="$paddingGroup" onAction="#setPadding" text="X9.23Padding" />
                         <RadioMenuItem toggleGroup="$paddingGroup" onAction="#setPadding" text="TBCPadding" />
                         <RadioMenuItem toggleGroup="$paddingGroup" onAction="#setPadding" text="ZeroBytePadding" />
+                        <RadioMenuItem toggleGroup="$paddingGroup" onAction="#setPadding" text="NoPadding" />
                     </items>
                 </Menu>
             </items>

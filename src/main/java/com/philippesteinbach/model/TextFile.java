@@ -32,11 +32,4 @@ public class TextFile {
         return content;
     }
 
-    public String getContentAsString() {
-        String s = "";
-        for (String line : content) {
-            s += line;
-        }
-        return s;
-    }
 }

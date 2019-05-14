@@ -18,7 +18,9 @@ public class EditorApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui.fxml"));
-        loader.setControllerFactory(t -> new EditorController(new EditorModel())); // Create Factory for creating the controller
+
+        loader.setControllerFactory(t -> new EditorController(new EditorModel())); // Create & set factory for creating the controller
+
         Security.addProvider(new BouncyCastleProvider());
 
         primaryStage.setTitle("Simple Text Editor");

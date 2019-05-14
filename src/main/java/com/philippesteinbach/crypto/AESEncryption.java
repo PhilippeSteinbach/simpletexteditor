@@ -1,7 +1,8 @@
 package com.philippesteinbach.crypto;
 
+import javafx.scene.control.Alert;
+
 import javax.crypto.*;
-import javax.crypto.spec.IvParameterSpec;
 import java.security.*;
 
 /**
@@ -21,14 +22,9 @@ public class AESEncryption implements BouncyCastleEncryption{
      */
     public AESEncryption(String blockMode, String padding) {
         try {
-            this.blockMode = blockMode;
             cipher = Cipher.getInstance("AES/" + blockMode + "/" + padding, "BC");
-
-            if(blockMode.equals("CBC") || blockMode.equals("CTS")){
-                this.iv = cipher.getIV();
-                System.out.println("IV generated (CBC,CTS)");
-            }
-
+            this.blockMode = blockMode;
+            this.iv = cipher.getIV();
             createKey();
         } catch (NoSuchAlgorithmException | NoSuchProviderException | NoSuchPaddingException e) {
             System.out.println(e.getMessage());
@@ -45,16 +41,33 @@ public class AESEncryption implements BouncyCastleEncryption{
 
     /**
      * Receives a plain text, processes it and returns the encrypted cipher text
+     *
      * @param plainText The text to be encrypted
      * @return AES encrypted cipher text
      */
     public byte[] encrypt(byte[] plainText) {
         try {
-            cipher.init(Cipher.ENCRYPT_MODE, key);
+
+            if(blockMode.equals("ECB")){
+                cipher.init(Cipher.ENCRYPT_MODE, key);
+            } else {
+                AlgorithmParameters ivParams = cipher.getParameters();
+                cipher.init(Cipher.ENCRYPT_MODE, key, ivParams); // notwendig? JA! Ansonsten IV = 0 (=>ECB)
+            }
+            byte[] encrypted = cipher.doFinal(plainText);
             System.out.println("encrypted with " + cipher.getAlgorithm());
-            return cipher.doFinal(plainText);
-        } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+            System.out.println("plain text length  = " + plainText.length);
+            System.out.println("cipher text length  = " + encrypted.length);
+            return encrypted;
+        } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
             System.out.println(e.getMessage());
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("An error occured. Please try again with different cipher configuration"); //TODO more concrete information about error (do not catch 4 exceptions at once)
+            alert.showAndWait();
+
             return null;
         }
     }
@@ -66,16 +79,20 @@ public class AESEncryption implements BouncyCastleEncryption{
      */
     public byte[] decrypt(byte[] cipherText) {
         try {
-            if(blockMode.equals("CBC") || blockMode.equals("CTS")){
+            if(blockMode.equals("ECB")){
+                cipher.init(Cipher.DECRYPT_MODE, key);
+            } else {
                 AlgorithmParameters ivParams = cipher.getParameters();
                 cipher.init(Cipher.DECRYPT_MODE, key, ivParams);
-            } else {
-                cipher.init(Cipher.DECRYPT_MODE, key);
             }
+            byte[] decrypted = cipher.doFinal(cipherText);
             System.out.println("decrypted with " + cipher.getAlgorithm());
-            return cipher.doFinal(cipherText);
+            System.out.println("cipher text length  = " + cipherText.length);
+            System.out.println("plain text length  = " + decrypted.length);
+            return decrypted;
         } catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException | InvalidAlgorithmParameterException e) {
             System.out.println(e.getMessage());
+            //TODO Alert if exception thrown
             return null;
         }
     }

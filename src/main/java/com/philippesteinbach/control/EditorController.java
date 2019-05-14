@@ -19,18 +19,17 @@ public class EditorController {
 
     @FXML
     private TextArea areaText;
+    @FXML
+    private ToggleGroup modeGroup;
+    @FXML
+    private ToggleGroup paddingGroup;
     private TextFile currentTextFile;
     private EditorModel model;
-    private CryptoFactory cryptoFactory;
+    private CryptoFactory cryptoFactory ;
     private AESEncryption enc;
+    //encryption preconfiguration
     private String blockMode = "ECB";
     private String padding = "PKCS5Padding";
-
-    @FXML
-    ToggleGroup modeGroup;
-    @FXML
-    ToggleGroup paddingGroup;
-
 
     //Constructor
     public EditorController(EditorModel model) {
@@ -137,11 +136,13 @@ public class EditorController {
      * This method is called when the user wants to encrypt a text file.
      * Reads text from the applications textarea and encrypts it.
      * Refresh textarea with Base64 encoded cipher text.
+     *
      */
     @FXML
     public void onEncrypt() {
-        //enc = cryptoFactory.getAESEncryption("ECB", "PKCS5Padding");
-        enc = cryptoFactory.getAESEncryption(blockMode, padding);
+        if(enc == null){
+            enc = cryptoFactory.getAESEncryption(blockMode, padding);
+        }
         String plainText = areaText.getText();
         byte[] encrypted = enc.encrypt(Hex.encode(plainText.getBytes()));
 
@@ -160,8 +161,8 @@ public class EditorController {
     public void onDecrypt() {
         String cipherText = areaText.getText();
         //enc = cryptoFactory.getAESEncryption(blockMode, padding); // BadPaddingException: pad block corrupted because key corrupted/modified (solution: new enc only on change)
-        byte[] decrypted = enc.decrypt(Hex.decode(cipherText.getBytes()));
 
+        byte[] decrypted = enc.decrypt(Hex.decode(cipherText));
         //update textarea
         areaText.clear();
         String plainText = new String(Hex.decode(decrypted));
