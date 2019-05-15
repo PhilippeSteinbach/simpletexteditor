@@ -20,7 +20,7 @@ public class EditorApp extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui.fxml"));
 
         loader.setControllerFactory(t -> new EditorController(new EditorModel())); // Create & set factory for creating the controller
-
+        //test
         Security.addProvider(new BouncyCastleProvider());
 
         primaryStage.setTitle("Simple Text Editor");
